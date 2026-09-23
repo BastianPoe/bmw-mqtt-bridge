@@ -17,4 +17,5 @@ if [ $? -eq 0 ]; then
   echo "✅ Build successful: $SRC_DIR/bmw_mqtt_bridge"
 else
   echo "❌ Build failed"
+  exit 1
 fi

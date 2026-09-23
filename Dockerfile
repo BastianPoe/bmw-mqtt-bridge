@@ -20,7 +20,7 @@ RUN chmod +x ./scripts/compile.sh && bash ./scripts/compile.sh
 # Runtime stage
 FROM debian:bookworm-slim
 
-# Install runtime dependencies only (lean but includes nano for interactive setup)
+# Install runtime dependencies only (includes openssl for bmw_flow.sh OAuth PKCE)
 RUN apt-get update && apt-get install -y \
     libmosquitto1 \
     libcurl4 \
@@ -29,6 +29,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     jq \
     nano \
+    openssl \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -53,9 +54,5 @@ ENV XDG_STATE_HOME=/app/state \
 # Persist token/config directory
 VOLUME ["/app/state"]
 
-COPY ./scripts/docker-entrypoint.sh /app/docker-entrypoint.sh
-RUN chmod +x /app/docker-entrypoint.sh
-
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
 CMD ["/app/bmw_mqtt_bridge"]
-
